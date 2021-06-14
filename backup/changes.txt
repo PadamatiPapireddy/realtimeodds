@@ -1,0 +1,586 @@
+event:
+
+package com.realtimeodd.common.model;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Event {
+
+	protected Long id;
+	protected String name;
+	protected List<String> tags;
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public List<String> getTags() {
+		return tags;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+	
+}
+
+
+Group
+
+package com.realtimeodd.common.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Group {
+	
+	protected Long id;
+
+	public Long getId() {
+		return id;
+	}
+	
+}
+
+livedata
+
+package com.realtimeodd.common.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class LiveData {
+	
+	protected Long eventId;
+
+	public Long getEventId() {
+		return eventId;
+	}
+	
+
+}
+
+
+LiveEvent
+
+package com.realtimeodd.common.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class LiveEvent {
+	
+	protected Event event ;
+	
+	protected MainBetOffer mainBetOffer;
+	
+	protected LiveData liveData;
+	
+	public LiveEvent() {
+		super();
+	}
+
+	public Event getEvent() {
+		return event;
+	}
+
+	public void setEvent(Event event) {
+		this.event = event;
+	}
+
+	public MainBetOffer getMainBetOffer() {
+		return mainBetOffer;
+	}
+
+	public void setMainBetOffer(MainBetOffer mainBetOffer) {
+		this.mainBetOffer = mainBetOffer;
+	}
+
+	public LiveData getLiveData() {
+		return liveData;
+	}
+	
+	
+
+}
+
+
+Live event Response
+
+package com.realtimeodd.common.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class LiveEventResponse {
+
+protected List<LiveEvent> liveEvents = new ArrayList<>();
+
+protected Group group ;
+	
+	public LiveEventResponse() {
+		super();
+	}
+
+	public List<LiveEvent> getLiveEvents() {
+		return liveEvents;
+	}
+
+	public void setLiveEvents(List<LiveEvent> liveEvents) {
+		this.liveEvents = liveEvents;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+	
+}
+
+
+MainBet
+
+package com.realtimeodd.common.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class MainBetOffer {
+	
+	protected Long id;
+	protected List<Outcome> outcomes = new ArrayList<>();
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public List<Outcome> getOutcomes() {
+		return outcomes;
+	}
+	public void setOutcomes(List<Outcome> outcomes) {
+		this.outcomes = outcomes;
+	}
+
+}
+
+
+package com.realtimeodd.common.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Outcome {
+	
+	protected Long id;
+	protected String label;
+	protected double odds;
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	public double getOdds() {
+		return odds;
+	}
+	public void setOdds(double odds) {
+		this.odds = odds;
+	}
+	
+	
+}
+
+
+package com.realtimeodd.common.util;
+
+public class Constants {
+	
+	public static final String TAGS = "MATCH" ;
+	public static final String URL = "https://eu-offering.kambicdn.org/offering/v2018/ubse/event/live/open.json";
+	public static final long TIME_INTERVAL = 10000;
+
+}
+
+
+package com.realtimeodd.common.util;
+
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class FormatUtil {
+		
+	public static String getLocalTime() {  
+	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+	    Date date = new Date();  
+	    return formatter.format(date);
+	}  
+	
+	public static String getDecimalValue(Double value) {  
+	    DecimalFormat decimalFormat = new DecimalFormat("#.00");  
+	    return decimalFormat.format(value);
+	}  
+}
+
+
+package com.realtimeodd.service;
+
+import java.io.IOException;
+
+import com.realtimeodd.common.model.LiveEventResponse;
+
+public interface RealTimeOddInfoService {
+	LiveEventResponse getLiveEvent() throws IOException;
+}
+
+
+package com.realtimeodd.service;
+
+import java.util.Optional;
+import java.util.TimerTask;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.realtimeodd.common.model.LiveEvent;
+import com.realtimeodd.common.model.LiveEventResponse;
+import com.realtimeodd.common.model.Outcome;
+import com.realtimeodd.common.util.Constants;
+import com.realtimeodd.common.util.FormatUtil;
+import com.realtimeodd.service.impl.RealtimeOddsInfoServiceCaller;
+
+/**
+ * 
+ * @author papireddy.padamati
+ * 
+ *         Provides the interfaces to call Kambi API and Live events operations.
+ * 
+ */
+public class RealTimeOddTimerTask extends TimerTask {
+
+	private final Logger log = LoggerFactory.getLogger(RealTimeOddTimerTask.class);
+
+	private RealTimeOddInfoService realTimeOddInfoService;
+	private String liveEventName;
+
+	private Long id;
+
+	/**
+	 * Provides the class and interface for calling the Kambi API to get the Odds
+	 * Information.
+	 * 
+	 * @param id an event Id provided as argument.
+	 */
+	public RealTimeOddTimerTask(Long id) {
+		this.id = id;
+		realTimeOddInfoService = new RealtimeOddsInfoServiceCaller(new ObjectMapper());
+	}
+
+	/**
+	 * This operation takes the id of any event provided and prints the output on 
+	 * the console with the event name current time and main bet offer odds of that 
+	 * event.
+	 */
+
+	@Override
+	public void run() {
+		excuteLiveEvents(id);
+
+	}
+
+	private void excuteLiveEvents(Long id) {
+
+		try {
+
+			LiveEventResponse liveEventResponse = realTimeOddInfoService.getLiveEvent();
+
+			Optional<LiveEvent> liveEventOptional = getLiveEventbyId(liveEventResponse, id);
+
+			if (liveEventOptional.isPresent()) {
+				LiveEvent liveEvent = liveEventOptional.get();
+				if (liveEventName == null) {
+					liveEventName = liveEvent.getEvent().getName();
+					System.out.println("Event: " + liveEventName);
+				}
+
+				displayOutcome(liveEvent);
+				System.out.print("\n");
+			}
+		} catch (Exception e) {
+			log.error("Exception:", e);
+		}
+
+	}
+
+	private Optional<LiveEvent> getLiveEventbyId(LiveEventResponse liveEventResponse, Long id) {
+
+		return liveEventResponse.getLiveEvents().stream()
+				.filter(event -> event.getEvent() != null && event.getEvent().getId().equals(id))
+				.filter(event -> event.getEvent().getTags() != null
+						&& event.getEvent().getTags().contains(Constants.TAGS))
+				.findAny();
+
+	}
+
+	private void displayOutcome(LiveEvent liveEvent) {
+
+		if (liveEvent.getMainBetOffer() != null) {
+			System.out.print("[" + FormatUtil.getLocalTime() + "]");
+			liveEvent.getMainBetOffer().getOutcomes().stream().forEach(this::printOdds);
+		}
+
+	}
+
+	private void printOdds(Outcome outcome) {
+		double oddValue = outcome.getOdds() / 1000;
+		System.out.print(" | " + outcome.getLabel() + ":     " + FormatUtil.getDecimalValue(oddValue) + " | ");
+	}
+
+}
+
+
+package com.realtimeodd.service.impl;
+
+import java.io.IOException;
+import java.net.URL;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.realtimeodd.common.model.LiveEventResponse;
+import com.realtimeodd.common.util.Constants;
+import com.realtimeodd.service.RealTimeOddInfoService;
+
+/**
+ * 
+ * @author papireddy.padamati Provides the operation for calling the Kambi API.
+ *
+ */
+public class RealtimeOddsInfoServiceCaller implements RealTimeOddInfoService {
+	
+	private ObjectMapper objectMapper;
+	
+	/**
+	 * 
+	 * @param objectMapper an objectMapper provided as an argument.
+	 */
+	public RealtimeOddsInfoServiceCaller(ObjectMapper objectMapper) {
+		super();
+		this.objectMapper = objectMapper;
+	}
+	
+	/**
+	 * Get the odds information from the Kambi API.
+	 */
+	public  LiveEventResponse getLiveEvent() throws IOException {
+		
+		URL url = new URL(Constants.URL);
+		
+		try {
+			return objectMapper.readValue(url, LiveEventResponse.class);
+		} catch (IOException e) {
+			throw new IOException("Failed with following exception:" + e.getMessage());
+		}
+
+	}
+}
+
+
+package realtimeodds.realtimeodd;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.realtimeodd.common.util.Constants;
+import com.realtimeodd.service.RealTimeOddTimerTask;
+
+/**
+ * 
+ * @author papireddy.padamati Provides the classes for Real Time Odd Timer Task
+ *         and continuously polls the Kambi API.
+ *
+ */
+public class RealTimeOddsApplication {
+
+	public static void main(String[] args) {
+
+		if (args.length == 0) {
+			System.err.println("Enter the event Id: ");
+			return;
+		}
+		Long id = Long.valueOf(args[0]);
+
+		Timer timer = new Timer();
+		TimerTask realTimeOddTimerTask = new RealTimeOddTimerTask(id);
+		timer.scheduleAtFixedRate(realTimeOddTimerTask, 0, Constants.TIME_INTERVAL);
+	}
+
+}
+
+
+package realtimeodds.realtimeodd.service.impl;
+
+import static org.junit.Assert.assertThat;
+
+import java.net.URL;
+
+import org.hamcrest.core.Is;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.realtimeodd.common.model.LiveEventResponse;
+import com.realtimeodd.service.impl.RealtimeOddsInfoServiceCaller;
+
+/**
+ * 
+ * @author papireddy.padamati Provides the operations to run the test cases for
+ *         Real Time Odds.
+ *
+ */
+public class RealtimeOddsInfoServiceCallerTest {
+
+	private RealtimeOddsInfoServiceCaller realtimeOddsInfoServiceCaller;
+	private ObjectMapper objectMapper;
+
+	@Before
+	public void setUp() throws Exception {
+
+		objectMapper = Mockito.mock(ObjectMapper.class);
+		realtimeOddsInfoServiceCaller = new RealtimeOddsInfoServiceCaller(objectMapper);
+
+	}
+
+	/**
+	 * Verifies the Kambi API and throws the exception when any issue occurs while
+	 * getting the information from the API.
+	 * 
+	 * @throws Exception throws the exception if any issue occurs.
+	 */
+	@Test
+	public void verifyGetLiveEvent() throws Exception {
+		LiveEventResponse expectedLiveEventResponse = new LiveEventResponse();
+
+		Mockito.doReturn(expectedLiveEventResponse).when(objectMapper).readValue(Mockito.any(URL.class),
+				Mockito.eq(LiveEventResponse.class));
+
+		LiveEventResponse actualLiveEventResponse = realtimeOddsInfoServiceCaller.getLiveEvent();
+
+		assertThat(actualLiveEventResponse, Is.is(expectedLiveEventResponse));
+		Mockito.verify(objectMapper, Mockito.only()).readValue(Mockito.any(URL.class),
+				Mockito.eq(LiveEventResponse.class));
+
+	}
+
+}
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>realtimeodds</groupId>
+  <artifactId>realtimeodd</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>realtimeodd</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+     <dependency>
+    			<groupId>org.json</groupId>
+    			<artifactId>json</artifactId>
+   				<version>20140107</version>
+			</dependency>
+   	 <dependency>
+            <artifactId>commons-logging</artifactId>
+            <groupId>commons-logging</groupId>
+            <version>1.0</version>
+            <scope>provided</scope>
+            </dependency>
+			
+            <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
+            <scope>compile</scope>
+            </dependency>
+            			<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>1.7.30</version>
+	</dependency>
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>1.7.30</version>
+    </dependency>
+            <dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.12.3</version>
+</dependency>
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.12</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <version>3.11.1</version>
+    <scope>test</scope>
+</dependency>
+
+  </dependencies>
+</project>
